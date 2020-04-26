@@ -1,4 +1,4 @@
-from subprocess import check_output
+import subprocess
 
 from charms.reactive import (
     endpoint_from_flag,
@@ -11,24 +11,27 @@ from charmhelpers.core.hookenv import (
     open_port,
     unit_private_ip,
     status_set,
+    log,
 )
 
 
 @when('slurm.base.available')
-@when_not('slurm.snap.mode.set')
+@when_not('snap.mode.set')
 def set_snap_mode():
     """Set the snap.mode to slurmdbd
     """
-    out = check_output(["snap", "set", "slurm", "snap.mode=slurmdbd"])
-    if out:
+    if subprocess.call(["snap", "set", "slurm", "snap.mode=slurmdbd"]) == 0:
         open_port(6819)
         status_set("active", f"slurmdbd available")
         set_flag('slurm.snap.mode.set')
     else:
-        status_set('blocked', "DEBUG_SNAP_MODE_SET")
+        msg = "DEBUG NEEDED - set_snap_mode()"
+        status_set('blocked', msg)
+        log(msg)
         return
 
-@when('slurm.snap.mode.set',
+
+@when('snap.mode.set',
       'endpoint.slurmdbd-host-port.joined')
 def provide_http_relation_data():
     endpoint = endpoint_from_flag('endpoint.slurmdbd.host-port.joined')

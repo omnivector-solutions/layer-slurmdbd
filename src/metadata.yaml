@@ -1,0 +1,16 @@
+name: slurmdbd
+summary: SLURMDBD
+maintainer: Omnivector Solutions <admin@omnivector.solutions>
+description: |
+  SLURMDBD
+tags:
+  - cache
+  - db
+  - redis
+subordinate: false
+series:
+- bionic
+- focal
+provides:
+  slurmdbd-host-port:
+    interface: host-port

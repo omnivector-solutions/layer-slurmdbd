@@ -1,0 +1,5 @@
+includes:
+  - 'layer:basic'
+  - 'layer:slurm-base'
+  - 'interface:host-port'
+repo: "https://github.com:omnivector-solutions/layer-slurmdbd"
